@@ -2,7 +2,7 @@ const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
 // create our User model
-class User extends Model {}
+class User extends Model {};
 
 // Define table columns and configuration
 User.init({
@@ -56,3 +56,5 @@ User.init({
     // make it so our model name stays lowercase in the database
     modelName: 'user'
 });
+
+module.exports = User;

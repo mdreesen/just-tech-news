@@ -2,6 +2,7 @@
 const router = require('express').Router();
 // then require the file
 const { User } = require('../../models');
+const { restore } = require('../../models/User');
 
 // GET api/users
 // Access our User model and run .findAll() method
@@ -41,13 +42,14 @@ router.get('/:id', (req, res) => {
 });
 
 // POST api/users
+// expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
+// This is like using this SQL query here:
+// INSERT INTO users
+// (username, email, password)
+// VALUES
+//("Lernantino", "lernantino@gmail.com", "password1234");
 router.post('/', (req, res) => {
     // expects {username: 'Lernantino', email: 'lernantino@gmail.com', password: 'password1234'}
-    // This is like using this SQL query here:
-    // INSERT INTO users
-    // (username, email, password)
-    // VALUES
-    //("Lernantino", "lernantino@gmail.com", "password1234");
     User.create({
             username: req.body.username,
             email: req.body.email,
@@ -57,7 +59,7 @@ router.post('/', (req, res) => {
         .catch(err => {
             console.log(err);
             res.status(500).json(err);
-        })
+        });
 });
 
 // PUT api/users/:id - update user with this specific ID
