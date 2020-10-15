@@ -1,7 +1,7 @@
 // first initialize express
 const router = require('express').Router();
 // then require the file
-const { User } = require('../../models');
+const { User, Post, Vote } = require('../../models');
 const { restore } = require('../../models/User');
 
 // GET api/users
@@ -29,7 +29,19 @@ router.get('/:id', (req, res) => {
             attributes: { exclude: ['password'] },
             where: {
                 id: req.params.id
-            }
+            },
+            // replace the existing `include` with this
+            include: [{
+                    model: Post,
+                    attributes: ['id', 'title', 'post_url', 'created_at']
+                },
+                {
+                    model: Post,
+                    attributes: ['title'],
+                    through: Vote,
+                    as: 'voted_posts'
+                }
+            ]
         })
         .then(dbUserData => {
             if (!dbUserData) {
