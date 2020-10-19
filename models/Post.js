@@ -1,7 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
-
-// Create our post model
+// create our Post model
 class Post extends Model {
     static upvote(body, models) {
         return models.Vote.create({
@@ -20,13 +19,21 @@ class Post extends Model {
                         sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'),
                         'vote_count'
                     ]
-                ]
+                ],
+                include: [{
+                    model: models.Comment,
+                    attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+                    include: {
+                        model: models.User,
+                        attributes: ['username']
+                    }
+                }]
             });
         });
     }
 }
 
-// Create fields and columns for the Post model
+// create fields/columns for Post model
 Post.init({
     id: {
         type: DataTypes.INTEGER,
@@ -42,10 +49,9 @@ Post.init({
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-            isUrl: true
+            isURL: true
         }
     },
-    // this column determines who posted the news article
     user_id: {
         type: DataTypes.INTEGER,
         references: {

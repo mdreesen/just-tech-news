@@ -6,20 +6,19 @@ class Comment extends Model {}
 Comment.init({
     id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
         primaryKey: true,
-        autoIncrement: true,
-        validate: {
-            len: [1, 200]
-        }
+        autoIncrement: true
     },
-    // Columns will go here
     comment_text: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+            len: [1]
+        }
     },
     user_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
             model: 'user',
             key: 'id'
@@ -27,7 +26,6 @@ Comment.init({
     },
     post_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
             model: 'post',
             key: 'id'
@@ -38,6 +36,6 @@ Comment.init({
     freezeTableName: true,
     underscored: true,
     modelName: 'comment'
-})
+});
 
 module.exports = Comment;
