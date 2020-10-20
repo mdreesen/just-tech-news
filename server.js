@@ -6,21 +6,12 @@ const path = require('path');
 // adding express session to see the users sessions
 const session = require('express-session');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-
-const app = express();
-const PORT = process.env.PORT || 3001;
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-// serves as static asset
-app.use(express.static(path.join(__dirname, 'public')));
-
-// turn on routes
-app.use(routes);
-
 // require handlebars
 const exphbs = require('express-handlebars');
 const hbs = exphbs.create({});
+
+const app = express();
+const PORT = process.env.PORT || 3001;
 
 // adding the sess here for user sessions
 const sess = {
@@ -33,8 +24,16 @@ const sess = {
     })
 }
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// serves as static asset
+app.use(express.static(path.join(__dirname, 'public')));
+
 // putting the app.use below the const sess
 app.use(session(sess));
+
+// turn on routes
+app.use(routes);
 
 // connect to handlbars engine
 app.engine('handlebars', hbs.engine);
