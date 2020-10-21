@@ -48,7 +48,10 @@ router.get('/', (req, res) => {
                 // pass a single post object into the homepage template
                 // the .get({ plain: true}) makes this data readable to the user
             const posts = dbPostData.map(post => post.get({ plain: true }));
-            res.render('homepage', { posts });
+            res.render('homepage', {
+                posts,
+                loggedIn: req.session.loggedIn
+            });
         })
         .catch(err => {
             console.log(err);
@@ -62,6 +65,24 @@ router.get('/login', (req, res) => {
         return
     }
     res.render('login');
+});
+
+router.get('/post/:id', (req, res) => {
+    const post = {
+        id: 1,
+        post_url: 'https://handlebarsjs.com/guide/',
+        title: 'Handlebars Docs',
+        created_at: new Date(),
+        vote_count: 10,
+        comments: [{}, {}],
+        user: {
+            username: 'test_user'
+        }
+    };
+    res.render('single-post', {
+        post,
+        loggedIn: req.session.loggedIn
+    })
 });
 
 
